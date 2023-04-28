@@ -1,31 +1,17 @@
 body {
     overflow: hidden;
+    padding: 0;
+    margin: 0;
+    height: 600px;
+    background-image: url("https://media.istockphoto.com/id/157639696/zh/%E7%85%A7%E7%89%87/purple-space-stars.jpg?b=1&s=612x612&w=0&k=20&c=scJF6p8hYBy8YjcG9vwg2VCPLsYXMR-QFD0P-6qR2JA=");
+}
+
+div {
     margin: 0px;
+    padding: 0px;
 }
 
-.box {
-    background-color: blueviolet;
-    width: 225px;
-    height: 225px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: 5px solid black; 
-    border-radius: 20px;
-    margin: auto;
-    margin-top: 25px;
-}
-
-.box h1 {
-    color: white;
-}
-
-.app {
-    margin-top: 32px;
-    display: block;
-    border: 10px solid red;
-    height: calc(100% - 52px);
-    width: calc(100% - 20px);
-    overflow: auto;
-    position: relative;
+p {
+    margin: 0px;
+    padding: 0px;
 }

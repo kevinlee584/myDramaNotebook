@@ -1,10 +1,13 @@
-const { app, screen, BrowserWindow, ipcMain  } = require('electron')
+// Desktop windows
+
+
+const { app, screen, BrowserWindow, ipcMain, shell  } = require('electron')
 const path = require('path')
 
 const isDev = false
 
 function createWindow () {
-    const {width,height} = screen.getPrimaryDisplay().workAreaSize;
+  const {width,height} = screen.getPrimaryDisplay().workAreaSize;
 
   const win = new BrowserWindow({
     width:  isDev ? 800 : 400,
@@ -17,10 +20,16 @@ function createWindow () {
   })
 
   // win.loadFile('index.html')
-  win.loadURL("http://localhost:8080/")
+  win.loadURL("http://localhost:3000/")
+
 
   if (isDev)
     win.webContents.openDevTools();
+
+  win.webContents.setWindowOpenHandler(({ url }) => {
+    shell.openExternal(url);
+    return { action: 'deny' };
+  });
 
   ipcMain.on('set-controller-events', (_event, ...args) => {
 

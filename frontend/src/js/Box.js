@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import "../css/style.css";
+import "../css/box.css";
   
-const Box = ({ num }) => {
+const Box = ({ imageUrl, videoUrl, videoName }) => {
+
     return (
         <div className="box">
-            <h1>Box {num}</h1>
+            <a href={videoUrl} className="video-block" target="_blank">
+                <div>
+                    <img src={imageUrl} className="video-image"></img>
+                    <div className="video-name">
+                        <p>{videoName}</p>
+                    </div>
+                </div>
+            </a>
         </div>
     )
 };
