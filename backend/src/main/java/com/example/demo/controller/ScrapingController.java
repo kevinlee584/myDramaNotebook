@@ -3,13 +3,12 @@ package com.example.demo.controller;
 import com.example.demo.model.Drama;
 import com.example.demo.model.DramaSort;
 import com.example.demo.model.Provider;
-import com.example.demo.scraping.Bahamut;
-import com.example.demo.scraping.Scraper;
 import com.example.demo.scraping.ScraperScripts;
 import com.example.demo.service.ScraperService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +26,7 @@ class ProvidersResponseTemplate {
      final private Map<String, String> sorts;
 }
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @AllArgsConstructor
 public class ScrapingController {
@@ -50,7 +50,8 @@ public class ScrapingController {
     final private List<ProvidersResponseTemplate> providersResponse = sortOfDramas.stream()
             .collect(Collectors.toMap(DramaSort::getProviderName,
                     e -> Map.of(e.getSortingName(), e.getSortingUrl()),
-                    (m1, m2) -> Stream.of(m1, m2).flatMap(map -> map.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))))
+                    (m1, m2) -> Stream.of(m1, m2).flatMap(map -> map.entrySet().stream())
+                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))))
             .entrySet().stream().map(e -> new ProvidersResponseTemplate(e.getKey(), e.getValue()))
             .collect(Collectors.toList());
 
