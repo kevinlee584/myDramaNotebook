@@ -15,7 +15,7 @@ public class ScraperService {
 
     private final ChromeDriver driver;
 
-    public List<Drama> scrape(Function<ChromeDriver, List<Drama>> scraper) {
+    synchronized public List<Drama> scrape(Function<ChromeDriver, List<Drama>> scraper) {
         return scraper.apply(driver);
     }
 
