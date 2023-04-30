@@ -43,7 +43,11 @@ module.exports = {
             }
           }
         ]
-      }
+      }, 
+      {
+        test: /\.svg$/i,
+        use: "@svgr/webpack",
+      },
     ], 
   },
   devServer: {

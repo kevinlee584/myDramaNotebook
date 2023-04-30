@@ -2,16 +2,26 @@ body {
     overflow: hidden;
     padding: 0;
     margin: 0;
+    width: 400px;
     height: 600px;
-    background-image: url("https://media.istockphoto.com/id/157639696/zh/%E7%85%A7%E7%89%87/purple-space-stars.jpg?b=1&s=612x612&w=0&k=20&c=scJF6p8hYBy8YjcG9vwg2VCPLsYXMR-QFD0P-6qR2JA=");
+    background: linear-gradient(45deg, #bf8040, #d9b38c)
+    /* background-color: #bf8040; */
 }
 
 div {
     margin: 0px;
     padding: 0px;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
 }
 
 p {
     margin: 0px;
     padding: 0px;
+}
+
+svg {
+    height: 100% !important;
+    width: 100% !important;
 }

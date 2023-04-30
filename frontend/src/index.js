@@ -4,14 +4,14 @@ import ReactDOM from "react-dom";
 import "./css/style.css"
 import App from "./js/App.js";
 import TitleBar from "./js/TitleBar.js";
-
-
+import SidebarMenu from "./js/SideBarMenu";
 
 const appRouting = (
-  <div>
+  <>
     <TitleBar></TitleBar>
     <App></App>
-  </div>
+    <SidebarMenu></SidebarMenu>
+  </>
 );
 
 ReactDOM.render(appRouting, document.getElementById("root"));

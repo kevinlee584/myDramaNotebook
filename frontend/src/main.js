@@ -32,7 +32,6 @@ function createWindow () {
   });
 
   ipcMain.on('set-controller-events', (_event, ...args) => {
-
     const controllers = {
       "close": () => win.close(),
       "min": () => win.minimize(),

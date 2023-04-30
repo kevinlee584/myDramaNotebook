@@ -1,16 +1,9 @@
 const { ipcRenderer } = require('electron')
 
 window.addEventListener('DOMContentLoaded', () => {
-  const replaceText = (selector, text) => {
-    const element = document.getElementById(selector)
-    if (element) element.innerText = text
-  }
-
   const actions = [
-    ["min-button", "min"], 
-    ["max-button", "max"], 
-    ["restore-button", "restore"],
     ["close-button", "close"],
+    ["min-button", "min"], 
   ]
 
   for(const action of actions) {
