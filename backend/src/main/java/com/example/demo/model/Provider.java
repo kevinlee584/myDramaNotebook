@@ -10,4 +10,6 @@ public class Provider {
 
     final private String name;
 
+    final private String faviconUrl;
+
 }

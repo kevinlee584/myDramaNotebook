@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.model.Drama;
-import com.example.demo.model.DramaSort;
-import com.example.demo.model.Provider;
 import com.example.demo.scraping.ScraperScripts;
 import com.example.demo.service.ScraperService;
 import lombok.AllArgsConstructor;
@@ -17,12 +15,12 @@ import javax.annotation.PostConstruct;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Getter
 @AllArgsConstructor
 class ProvidersResponseTemplate {
      final private String provider;
+     final private String favicon;
      final private Map<String, String> sorts;
 }
 
@@ -33,40 +31,33 @@ public class ScrapingController {
 
     final private ScraperService scraperService;
 
-    final private List<Provider> provides = List.of(
-            new Provider("Bahamut")
-    );
-
-    final private List<DramaSort> sortOfDramas = List.of(
-            new DramaSort("new", "bahamut", "/provider/bahamut/new"),
-            new DramaSort("hot", "bahamut", "/provider/bahamut/hot")
-    );
-
     @PostConstruct
     void loadScrapingScript() throws ClassNotFoundException {
         Class.forName("com.example.demo.scraping.Bahamut");
     }
 
-    final private List<ProvidersResponseTemplate> providersResponse = sortOfDramas.stream()
-            .collect(Collectors.toMap(DramaSort::getProviderName,
-                    e -> Map.of(e.getSortingName(), e.getSortingUrl()),
-                    (m1, m2) -> Stream.of(m1, m2).flatMap(map -> map.entrySet().stream())
-                            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue))))
-            .entrySet().stream().map(e -> new ProvidersResponseTemplate(e.getKey(), e.getValue()))
-            .collect(Collectors.toList());
-
+    private List<ProvidersResponseTemplate> getProviders() {
+        return ScraperScripts.scrapers.entrySet().stream()
+                .map(e -> {
+                    String providerName = e.getKey();
+                    String providerFavoriteIcon = e.getValue().getProvider().getFaviconUrl();
+                    Map<String, String> providerSorts =  e.getValue().getScripts().keySet().stream()
+                            .collect(Collectors.toMap(e2 -> e2, e2 ->"/provider/" + providerName + "/" + e2));
+                    return new ProvidersResponseTemplate(providerName, providerFavoriteIcon, providerSorts);
+                }).collect(Collectors.toList());
+    }
 
     @GetMapping("/providers")
     public List<ProvidersResponseTemplate> getAllProviders(){
-        return providersResponse;
+        return getProviders();
     }
 
     @GetMapping("/provider/{provider}/{sort}")
     public List<Drama> getNewDramas(@PathVariable("provider") String provider, @PathVariable("sort") String sort){
 
-        Optional<Function<ChromeDriver, List<Drama>>> result = sortOfDramas.stream()
-                .filter(e -> e.getProviderName().equals(provider) && e.getSortingName().equals(sort))
-                .map(e -> ScraperScripts.scrapers.get(provider).getScripts().get(sort))
+        Optional<Function<ChromeDriver, List<Drama>>> result = ScraperScripts.scrapers.entrySet().stream()
+                .filter(e -> e.getKey().equals(provider))
+                .map(e -> e.getValue().getScripts().get(sort))
                 .findFirst();
 
         if (result.isPresent()) {

@@ -18,11 +18,13 @@ import java.util.stream.Collectors;
 
 final public class Bahamut implements Scraper{
 
-    final private String url = "https://ani.gamer.com.tw/";
+    final private String url = "https://ani.gamer.com.tw";
+
+    final private Provider provider = new Provider("bahamut", url + "/favicon.ico");
+
 
     static {
         ScraperScripts.scrapers.put("bahamut", new Bahamut());
-        System.out.println("Hello");
     }
 
     private List<Drama> getNewDramas(ChromeDriver driver) {
@@ -73,5 +75,10 @@ final public class Bahamut implements Scraper{
                 "new", this::getNewDramas,
                 "hot", this::getHotDramas
         );
+    }
+
+    @Override
+    public Provider getProvider() {
+        return provider;
     }
 }
