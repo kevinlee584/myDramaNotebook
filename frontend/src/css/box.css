@@ -1,41 +1,73 @@
 .box {
     width: 225px;
     height: 225px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border: 1px solid black; 
     margin: auto;
-    margin-top: 25px;
+    margin-top: 15px;
+    margin-bottom: 10px;
     box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
     border-radius: 10px;
     overflow: hidden;
     background-color: black;
+    position: relative;
 }
 
 .video-block {
     height: 100%;
     width: 100%;
     text-decoration: none;
+    position: absolute;
+    display: block;
 }
 
 .video-image {
     height: 80%;
     width: 100%;
     border-radius: 10px 10px 0 0;
+    position: absolute;
+    left: 0%;
+    top: 0%;
+}
+
+.video-name-blocker {
+    display: flex;
+    width: auto;
+    height: 20%;
+    position: absolute;
+    overflow: hidden;
+    bottom: 0%;
 }
 
 .video-name {
     background-color: #2e2f31;
-    height: 20%;
+    height: 100%;
     margin: 0;
-    display: flex;
     align-items: center;
-    overflow:hidden;
+    overflow: hidden;
+    width: auto;
+    display: flex;
     border-radius: 0 0 10px 10px;
+    position: relative;
 }
 
 .video-name p {
-    white-space: nowrap;
     color: aliceblue;
+    float: left;
+    min-width: 225px;
+    text-align: left;
+    white-space: nowrap;
+    position: relative;
+    margin-left: 10px;
+    
+}
+
+.video-name:hover {
+    animation: marquee 5s linear infinite;
+    animation-delay: 0.5s;
+}
+
+
+@keyframes marquee {
+    0% { left: 0; }
+    100% { left: calc(-50%); }
 }

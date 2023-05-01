@@ -22,7 +22,7 @@ const TitleBar = () => {
 
     useEffect(() => {
         document.getElementById("toggle-button").addEventListener('click', (_event) => {
-            const action = actionMap.get("clickBarsBtn")
+            const action = actionMap.get("controllMenuView")
             if (action) action()
         })
     })

@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 
 import '../css/sidebarmenu.css'
 import actionMap from './actionMap'
-import { serverUrl } from './AppProperties'
+import { serverUrl } from './configure/AppProperties'
 
 
-const SidebarMenu = function() {
+const MenuBar = function() {
     const [show, setShow] = useState(false)
     const [selectedBlocker, setSelectedBlocker] = useState(0)
     const [error, setError] = useState(null);
@@ -15,7 +15,7 @@ const SidebarMenu = function() {
     // register clickBarBtn function to actionMap
     useEffect(() => {
         var count = 0;
-        actionMap.set("clickBarsBtn", ()=>{
+        actionMap.set("controllMenuView", ()=>{
             count++;
             if ((count % 2) == 0) {
                 setShow(false)
@@ -62,7 +62,8 @@ const SidebarMenu = function() {
                 list.push((
                     <div className='menu-block' key={providers[i].provider}>
                         <div className='provider-block ' onClick={selecteBlocker(2**i)}>
-                            <p>{ providers[i].provider }</p>
+                            <img src={providers[i].favicon} className='provider-icon'></img>
+                            <div className='provider-name'><p>{ providers[i].provider }</p></div>
                         </div>
                         { Object.entries(providers[i].sorts).map(e => (
                         <div className='sort-block' key={providers[i].provider + e[0]} onClick={clickSort(e[1])}>
@@ -74,7 +75,8 @@ const SidebarMenu = function() {
                 list.push((
                     <div className='menu-block' key={providers[i].provider}>
                         <div className='provider-block ' onClick={selecteBlocker(2**i)}>
-                            <p>{ providers[i].provider }</p>
+                            <img src={providers[i].favicon} className='provider-icon'></img>
+                            <div className='provider-name'><p>{ providers[i].provider }</p></div>
                         </div>
                     </div>
                 ))
@@ -85,7 +87,10 @@ const SidebarMenu = function() {
                 <div id='menu-bar'>
                     { list }
                 </div>
-                <div className='background-blur-layer'></div>
+                <div className='background-blur-layer' onClick={() => {
+                    const action = actionMap.get("controllMenuView")
+                    if (action) action()
+                }}></div>
             </>
         )
     }
@@ -93,4 +98,4 @@ const SidebarMenu = function() {
     
 }
 
-export default SidebarMenu;
+export default MenuBar;

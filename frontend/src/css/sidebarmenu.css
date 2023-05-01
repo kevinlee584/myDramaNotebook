@@ -15,19 +15,35 @@
 .provider-block {
     height: 60px;
     display: flex;
-    align-items:center;
-    justify-content:center;
-    box-sizing: border-box;
+    position: relative;
+    align-items: center;
 }
 
-.provider-block p {
+.provider-icon {
+    height: 40px;
+    width: 40px;
+    position: relative;
+    margin-left: 5px;
+    margin-right: 5px;
+
+}
+
+
+.provider-name {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    width: 65%;
+    justify-content: center;
+}
+
+.provider-name p {
     font-family: Arial Black, Helvetica, sans-serif;
     font-size: 20px;
 }
 
-.provider-block:hover > p{
-    border: 5px solid white;
-    background-color: white;
+.provider-name:hover {
+    background-color: aliceblue;
     border-radius: 10px;
 }
 
@@ -38,6 +54,13 @@
     align-items:center;
     justify-content:center;
     box-sizing: border-box;
+}
+
+.provider-block-text {
+    border: 5px solid red;
+    background-color: red;
+    border-radius: 10px;
+    color: aliceblue;
 }
 
 .sort-block:hover > p{

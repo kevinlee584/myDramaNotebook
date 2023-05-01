@@ -1,5 +1,5 @@
 const actionMap = new Map([
-    ["clickBarsBtn", null], 
+    ["controllMenuView", null], 
     ["setPage", null],
     ["setPageStateToLoading", null],
 ])

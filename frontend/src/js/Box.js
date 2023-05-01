@@ -7,12 +7,15 @@ const Box = ({ imageUrl, videoUrl, videoName }) => {
     return (
         <div className="box">
             <a href={videoUrl} className="video-block" target="_blank">
-                <div>
+                <>
                     <img src={imageUrl} className="video-image"></img>
-                    <div className="video-name">
-                        <p>{videoName}</p>
+                    <div className="video-name-blocker">
+                        <div className="video-name">
+                            <p>{videoName}</p>
+                            <p>{videoName}</p>
+                        </div>
                     </div>
-                </div>
+                </>
             </a>
         </div>
     )
