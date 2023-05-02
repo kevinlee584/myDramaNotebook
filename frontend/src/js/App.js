@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 
 import Box from "./Box";
-import Loader from "./loader";
-import "../css/app.css"
+import Loader from "./Loader";
 import actionMap from "./actionMap";
+import Reload from '../static/icons/reload.svg'
+import "../css/app.css"
 import { serverUrl } from "./configure/AppProperties";
 
 
@@ -34,50 +35,63 @@ const App = () => {
 
 
 	useEffect(() => {
-		if (page) {
+		if (!page) return
+
+		var p = page
+
+		if (p.startsWith("update: ")) {
+			p = /http:\/\/.*/.exec(p)[0]
+			dramaMap.delete(p)
+			setIsLoaded(false)
+		}else {
 			const r = dramaMap.get(page)
-			if (r != undefined) 
+			if (r != undefined) {
 				setItems(r);
-			else {
-				setIsLoaded(false)
-
-				fetch(`${page}`)
-				.then(res => res.json())
-				.then((result) => {
-					let r = [result, result.size < 10 ? result.size : 10]
-					dramaMap.set(page, r)
-					setItems(r);
-					setIsLoaded(true);
-				}, 
-				(error) => {
-					setIsLoaded(true);
-					setError(error);
-				})
-
+				return;
 			}
 		}
+
+		setIsLoaded(false)
+
+		fetch(p)
+		.then(res => res.json())
+		.then((result) => {
+			let r = [result, result.size < 10 ? result.size : 10]
+			dramaMap.set(page, r)
+			setItems(r);
+			setIsLoaded(true);
+		}, 
+		(error) => {
+			setIsLoaded(true);
+			setError(error);
+		})
+		
+		
 	}, [page])
 
 	if (error) {
 		return <div>Error: {error.message}</div>;
 	} else if (!isLoaded) {
-		return (<div className="app-frame">
-			<Loader></Loader>
-		</div>)
+		return (
+			<div className="app-frame">
+				<Loader></Loader>
+			</div>)
 	} else {
 		var boxs = [];
 		for(let i=0; i<Math.min(items[0].length, items[1]); ++i)
 			boxs.push(<Box key={items[0][i].name} imageUrl={items[0][i].imageUrl} videoUrl={items[0][i].videoUrl} videoName={items[0][i].name}></Box>)
 
-		
-		console.log(items)
+		var reload = () => {
+			setPage(`update: ${page}`)
+		}
 
 		return (
 			<div className="app-frame">
+				<button className="reload-button" onClick={ reload }><Reload></Reload></button>
 				<div className="app">
 					{ boxs }
 					{ items[0].length > items[1] ? 
-						<button id="more-btn" onClick={() => {dramaMap.set(page, [items[0], items[1] + 10]); setItems([items[0], items[1] + 10]);}}>more</button> 
+						<button className="more-button" onClick={() => {dramaMap.set(page, [items[0], items[1] + 10]); setItems([items[0], items[1] + 10]);}}>more</button> 
 						: <div style={{height: '20px'}}></div>}
 				</div>
 			</div>

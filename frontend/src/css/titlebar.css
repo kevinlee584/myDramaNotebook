@@ -74,3 +74,8 @@
 #close-button:active .icon {
   filter: invert(1);
 }
+
+#toggle-button svg {
+  height: 100% !important;
+  width: 100% !important;
+}
