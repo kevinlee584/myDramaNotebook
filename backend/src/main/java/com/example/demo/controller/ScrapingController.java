@@ -61,7 +61,8 @@ public class ScrapingController {
                 .findFirst();
 
         if (result.isPresent()) {
-            return scraperService.scrape(result.get());
+            String url = String.format("/provider/{%s}/{%s}", provider, sort);
+            return scraperService.scrape(url, result.get());
         } else {
           return  Collections.emptyList();
         }
