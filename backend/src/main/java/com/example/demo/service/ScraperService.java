@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PreDestroy;
@@ -26,6 +27,9 @@ public class ScraperService {
 
     private final ChromeOptions options;
     private ChromeDriver driver ;
+
+    @Value("${webScrape.cache.expires}")
+    private long expire;
     private final Map<String, Tuple<Instant, List<Drama>>> dramasCache =  new HashMap<>();
 
     public ScraperService(@Autowired ChromeOptions options) {
@@ -37,7 +41,7 @@ public class ScraperService {
 
         var list = dramasCache.get(url);
 
-        if (list == null || Duration.between(Instant.now(), list.x).toMillis() > 300_000) {
+        if (list == null || Duration.between(Instant.now(), list.x).toMillis() > expire) {
 
             WebDriverException error = null;
 
