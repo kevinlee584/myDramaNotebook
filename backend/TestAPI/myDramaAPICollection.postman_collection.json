@@ -1,0 +1,296 @@
+{
+	"info": {
+		"_postman_id": "99136396-b3d8-4dce-93e8-04aa992c5fe4",
+		"name": "myDramaAPICollection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18047849"
+	},
+	"item": [
+		{
+			"name": "getAllProviders",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var schema = {\r",
+							"    \"type\": \"array\", \r",
+							"    \"items\": [{\r",
+							"        \"type\": \"object\", \r",
+							"        \"properties\": {\r",
+							"            \"provider\": {\r",
+							"                \"type\": \"string\"\r",
+							"            }, \r",
+							"            \"favicon\": {\r",
+							"                \"type\": \"string\"\r",
+							"            }, \r",
+							"            \"sorts\": {\r",
+							"                \"type\": \"object\", \r",
+							"                \"properties\": {\r",
+							"                    // dynamic json\r",
+							"                    // example: \r",
+							"                    // \"new\": \"/provider/bahamut/new\", \r",
+							"                    // \"hot\": \"/provider/bahamut/hot\"\r",
+							"                }\r",
+							"            }\r",
+							"        },\r",
+							"        \"required\": [\r",
+							"            \"provider\", \r",
+							"            \"favicon\", \r",
+							"            \"sorts\"\r",
+							"        ]\r",
+							"    }]\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Status test\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Validiate schema\", function() {\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/providers",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"providers"
+					]
+				},
+				"description": "This api allow you to get all website that provider dramas"
+			},
+			"response": [
+				{
+					"name": "getAllProviders",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/providers",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"providers"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Method"
+						},
+						{
+							"key": "Vary",
+							"value": "Access-Control-Request-Headers"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 02 May 2023 07:09:59 GMT"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=60"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"provider\": \"bahamut\",\n        \"favicon\": \"https://ani.gamer.com.tw/favicon.ico\",\n        \"sorts\": {\n            \"new\": \"/provider/bahamut/new\",\n            \"hot\": \"/provider/bahamut/hot\"\n        }\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "getDramas",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonSchema = {\r",
+							"    \"type\": \"array\", \r",
+							"    \"items\": {\r",
+							"        \"type\": \"object\", \r",
+							"        \"properties\": {\r",
+							"            \"providerName\": {\r",
+							"                \"type\": \"string\"\r",
+							"            },\r",
+							"            \"name\": {\r",
+							"                \"type\": \"string\"\r",
+							"            },\r",
+							"            \"imageUrl\": {\r",
+							"                \"type\": \"string\"\r",
+							"            },\r",
+							"            \"videoUrl\": {\r",
+							"                \"type\": \"string\"\r",
+							"            }\r",
+							"        },\r",
+							"        \"required\": [\r",
+							"            \"providerName\",\r",
+							"            \"name\",\r",
+							"            \"imageUrl\",\r",
+							"            \"videoUrl\"\r",
+							"        ]\r",
+							"    }\r",
+							"}\r",
+							"\r",
+							"pm.test(\"Status Code\", function() {\r",
+							"    pm.response.to.have.status(200);\r",
+							"})\r",
+							"\r",
+							"pm.test(\"Validiate Schema\", function() {\r",
+							"    pm.response.to.have.jsonSchema(schema);\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{url}}/provider/{{provider}}/{{sort}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"provider",
+						"{{provider}}",
+						"{{sort}}"
+					]
+				},
+				"description": "get dramaes from bahamut website"
+			},
+			"response": [
+				{
+					"name": "getDramas",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/provider/bahamut/hot",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"provider",
+								"bahamut",
+								"hot"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"鬼滅之刃 刀匠村篇\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/87/0000122787.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=113254\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"關於我轉生變成史萊姆這檔事 第二季\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/13/0000104513.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=112548\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"肌肉魔法使-MASHLE-\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/27/0000125527.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=113252\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"Fate/Grand Order - 絕對魔獸戰線巴比倫尼亞 -\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/33/0000100033.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=100033\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"【我推的孩子】\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/85/0000128085.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=113237\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"進擊的巨人 The Final Season 完結篇\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/39/0000130539.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=113229\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"輝夜姬想讓人告白－永不結束的初吻－\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/24/0000125624.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=113256\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"為美好的世界獻上爆焰！\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/14/0000129014.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=113238\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"最強陰陽師的異世界轉生記\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/12/0000126012.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=113220\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"和山田談場 Lv999 的戀愛\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/07/0000127607.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=113244\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"機動戰士鋼彈 水星的魔女 Season 2\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/72/0000130372.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=113247\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"在異世界獲得超強能力的我，在現實世界照樣無敵～等級提升改變人生命運～\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/45/0000126545.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=113240\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"轉生貴族的異世界冒險錄～不知自重的眾神使徒～\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/26/0000126226.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=113248\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"怕痛的我，把防禦力點滿就對了 第二季\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/ACG/c/89/0000115289.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeRef.php?sn=113210\"\n    }\n]"
+				},
+				{
+					"name": "getDramas",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/provider/bahamut/new",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"provider",
+								"bahamut",
+								"new"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"絆之 Allele\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/91/c47563b158b25398c9011fa4b71lhz75.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33390\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"在異世界獲得超強能力的我，在現實世界照樣無敵～等級提升改變人生命運～\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/90/3f370f8450c8126489e59d51b21lhz65.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33388\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"屍體如山的死亡遊戲\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/76/11fc2cbcc197b46b8bb5b84bb21lhw05.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33389\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"帶著智慧型手機闖蕩異世界。2\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/42/d10427d0ae3aaeeb87c8d0ef261lg8q5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33387\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"熊熊勇闖異世界 PUNCH！\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/89/1f68a6b1ba08889869caf891771lhz55.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33386\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"她去公爵家的理由\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/10/730987b9a0e74d58ac6c10024a1lhj25.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33385\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"機戰少女 Alice Expansion\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/51/1da8edc01668a2f6ece80f4b231lgpn5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33384\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"我與機器子\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/72/bc260ad1b916353769e4a435a11lhvw5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33383\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"鬼滅之刃 刀匠村篇\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/74/9c8748426da38484dc54fef8ee1lhci5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33382\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"我家的英雄\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/84/5be75cda3d0b6b11fe8c20f8431lgfg5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33381\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"轉生貴族的異世界冒險錄～不知自重的眾神使徒～\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/84/dabb072086cd812b8a0e79d6a51lhw85.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33380\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"機動戰士鋼彈 水星的魔女 Season 2\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/73/dea9346167d3ecaef497e5b9b11lhyp5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33379\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"我內心的糟糕念頭\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/55/2b715c9534e1861c5242f5d1871lghf5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33378\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"第二次被異世界召喚\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/19/9ec84e73c9d12feefc6bd89c6d1lh5f5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33377\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"鄰人似銀河\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/69/5530951f9eccb55586ec7b83811lh9l5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33376\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"和山田談場 Lv999 的戀愛\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/36/c129738ff1121c2984ee8304b11lhh05.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33375\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"MIX 第二季 ~第二個夏天，邁向晴空~\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/28/3734e3aba87f1225e9f4c149651lhuo5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33374\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"江戶前精靈\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/75/dd274e32ade7914887287ab93c1lhcj5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33373\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"小鳥之翼 第二季\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/06/dc47498efad9fc636369577cbd1lgg25.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33372\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"六道的惡女們\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/15/ab9d5531b7b362ad49daed3d5c1lhub5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33547\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"肌肉魔法使-MASHLE-\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/90/828490a6d7b8e0558bf62724ef1lgcu5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33371\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"劇場版 歌之☆王子殿下♪ 真愛 ST☆RISH TOURS\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/00/63d5c262d11a17e12c0a079b201layo5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33393\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"國王排名 勇氣的寶箱\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/21/01518f945c94da33b410f8647e1lfat5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33369\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"勇者死了！\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/91/c648a24495cc2b50bc30f9323b1lg7b5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33370\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"Opus.COLORs 色彩高校星\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/30/2b6fcb7bdc75be1cab7670e71a1lgum5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33368\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"百合是我的工作！\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/09/ff1408aba55165b7f57e89e9191lg515.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33367\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"Dr. STONE 新石紀 第三季\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/47/b653cf36219c99b410f51041381lf0f5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33366\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"魔法使的新娘 第二季\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/51/961a7a58b2de7da0204f2e3c2d1lg675.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33365\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"無神世界的神明活動\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/89/a8e8e542ea6d93831b617fef571lf9x5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33449\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"為美好的世界獻上爆焰！\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/56/f7e42b6e50dc1ca16b13c0055b1lev45.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33363\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"【我推的孩子】\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/16/2806ecf1c7dce32faff85bc4df1lg2g5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33314\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"魔術士歐菲 流浪之旅 聖域篇\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/69/3be8dcdfe6920ea83aeee74d511levh5.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33362\"\n    },\n    {\n        \"providerName\": \"Bahamut\",\n        \"name\": \"輝夜姬想讓人告白－永不結束的初吻－\",\n        \"imageUrl\": \"https://p2.bahamut.com.tw/B/2KU/11/71a1b80ccc94d2f2d0cb2b0ea31l4c35.JPG\",\n        \"videoUrl\": \"https://ani.gamer.com.tw/animeVideo.php?sn=33280\"\n    }\n]"
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "provider",
+			"value": "bahamut",
+			"type": "string"
+		},
+		{
+			"key": "sort",
+			"value": "hot",
+			"type": "string"
+		}
+	]
+}
