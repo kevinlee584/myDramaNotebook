@@ -60,39 +60,36 @@ const MenuBar = function() {
 
         for(const i in providers) {
 
-            if (selectedBlocker == 2**i) 
-                list.push((
-                    <div className='menu-block' key={providers[i].provider}>
-                        <div className='provider-block ' onClick={selecteBlocker(2**i)}>
-                            <img src={providers[i].favicon} className='provider-icon'></img>
-                            <div className='provider-name'><p>{ providers[i].provider }</p></div>
-                        </div>
-                        { Object.entries(providers[i].sorts).map(e => (
-                        <div className='sort-block' key={providers[i].provider + e[0]} onClick={clickSort(e[1])}>
-                            <p>{ e[0] }</p>
-                        </div>)) }
-                    </div>
-                ))
-            else 
-                list.push((
-                    <div className='menu-block' key={providers[i].provider}>
-                        <div className='provider-block ' onClick={selecteBlocker(2**i)}>
-                            <img src={providers[i].favicon} className='provider-icon'></img>
-                            <div className='provider-name'><p>{ providers[i].provider }</p></div>
-                        </div>
-                    </div>
-                ))
+            list.push((
+                <div className='provider-block ' key={providers[i].provider} onClick={selecteBlocker(2**i)}>
+                    <img src={providers[i].favicon} className='provider-icon'></img>
+                </div>
+            ))
         }
         
         return (
             <>
                 <div id='menu-bar'>
-                    { list }
+                    <div className='menu-block'>
+                        { list }
+                    </div>
+                    {
+                        selectedBlocker == 0 ? "" : 
+                            <div className='sort-block'>
+                                {
+                                    Object.entries(providers[Math.log2(selectedBlocker)].sorts)
+                                        .map(e => (
+                                            <div className='sort-blocker' key={providers[Math.log2(selectedBlocker)].provider + e[0]} onClick={clickSort(e[1])}>
+                                                <p>{ e[0] }</p>
+                                            </div>))
+                                }
+                            </div>
+                    }
+                    <div className='background-blur-layer' onClick={() => {
+                        const action = actionMap.get("controllMenuView")
+                        if (action) action()
+                    }}></div>
                 </div>
-                <div className='background-blur-layer' onClick={() => {
-                    const action = actionMap.get("controllMenuView")
-                    if (action) action()
-                }}></div>
             </>
         )
     }
