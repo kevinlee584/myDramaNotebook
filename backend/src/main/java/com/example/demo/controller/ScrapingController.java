@@ -6,10 +6,9 @@ import com.example.demo.service.ScraperService;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 import java.util.function.Function;
@@ -47,18 +46,19 @@ public class ScrapingController {
     }
 
     @GetMapping("/provider/{provider}/{sort}")
-    public List<Drama> getNewDramas(@PathVariable("provider") String provider, @PathVariable("sort") String sort){
+    public ResponseEntity<?> getDramas(@PathVariable("provider") String provider, @PathVariable("sort") String sort){
 
         Optional<Function<ChromeDriver, List<Drama>>> result = ScraperScripts.scrapers.entrySet().stream()
                 .filter(e -> e.getKey().equals(provider))
                 .map(e -> e.getValue().getScripts().get(sort))
+                .filter(Objects::nonNull)
                 .findFirst();
 
         if (result.isPresent()) {
             String url = String.format("/provider/{%s}/{%s}", provider, sort);
-            return scraperService.scrape(url, result.get());
+            return ResponseEntity.status(HttpStatus.ACCEPTED).body(scraperService.scrape(url, result.get()));
         } else {
-          return  Collections.emptyList();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Resource not found, provider: %s, sort: %s", provider, sort ));
         }
     }
 
