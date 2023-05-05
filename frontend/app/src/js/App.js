@@ -5,9 +5,9 @@ import Loader from "./Loader";
 import actionMap from "./actionMap";
 import Reload from '../static/icons/reload.svg'
 import "../css/app.css"
-import { serverUrl } from "./configure/AppProperties";
+import config from '../../../config'
 
-
+const serverUrl = config.backend.url
 const dramaMap = new Map()
 
 const App = () => {

@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react'
 
 import '../css/sidebarmenu.css'
 import actionMap from './actionMap'
-import { serverUrl } from './configure/AppProperties'
+import config from '../../../config'
 
+
+const serverUrl = config.backend.url
 
 const MenuBar = function() {
     const [show, setShow] = useState(false)

@@ -4,7 +4,7 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "electron ./src/main.js",
+    "start": "electron ./app/electron/main.js",
     "build": "webpack --config webpack.config.prod.js",
     "dev": "webpack-dev-server --config webpack.config.dev.js"
   },

@@ -1,11 +1,12 @@
 var path = require('path')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+var config = require('./config')
 
 module.exports = {
   mode: 'development',
   entry: [
-    './src/index.js'
+    './app/src/index.js'
   ],
   output: {
     path: path.join(__dirname, 'dist'),
@@ -14,7 +15,7 @@ module.exports = {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
-      template: './src/static/index.html'
+      template: './app/src/index.html'
     })
   ],
   module: {
@@ -57,6 +58,6 @@ module.exports = {
     compress: true,
     hot: true,
     open: true,
-    port: 3000
+    port: config.app.port
   }
 }
