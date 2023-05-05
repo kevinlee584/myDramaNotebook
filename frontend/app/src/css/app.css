@@ -70,6 +70,10 @@
     background: linear-gradient(45deg,#ffb84d, #e68a00);
 }
 
+.reload-button:active {
+    background: rgba(255,255,255,0.2);
+  }
+
 .reload-button svg {
     width: 20px;
     height: 20px;
