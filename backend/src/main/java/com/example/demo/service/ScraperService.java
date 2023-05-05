@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import java.time.Duration;
 import java.time.Instant;
@@ -31,6 +32,11 @@ public class ScraperService {
     @Value("${webScrape.cache.expires}")
     private long expire;
     private final Map<String, Tuple<Instant, List<Drama>>> dramasCache =  new HashMap<>();
+
+    @PostConstruct
+    void loadScrapingScript() throws ClassNotFoundException {
+        Class.forName("com.example.demo.scraping.Bahamut");
+    }
 
     public ScraperService(@Autowired ChromeOptions options) {
         this.options = options;
