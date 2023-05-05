@@ -9,7 +9,6 @@ import "../css/titlebar.css"
 import Toggle from "../static/icons/bars-solid.svg"
 import actionMap from "./actionMap";
 
-
 const icons = ["min", "close"]
         .map(m => (
             <div className="button" id={`${m}-button`} key={m}>
@@ -25,6 +24,8 @@ const TitleBar = () => {
             const action = actionMap.get("controllMenuView")
             if (action) action()
         })
+
+        window.dispatchEvent( new Event("title-bar-ready") )
     })
 
     return (
