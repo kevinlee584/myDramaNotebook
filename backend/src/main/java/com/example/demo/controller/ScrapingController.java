@@ -4,23 +4,17 @@ import com.example.demo.model.Drama;
 import com.example.demo.scraping.ScraperScripts;
 import com.example.demo.service.ScraperService;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-@Getter
-@AllArgsConstructor
-class ProvidersResponseTemplate {
-     final private String provider;
-     final private String favicon;
-     final private Map<String, String> sorts;
-}
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
