@@ -33,11 +33,6 @@ public class ScraperService {
     private long expire;
     private final Map<String, Tuple<Instant, List<Drama>>> dramasCache =  new HashMap<>();
 
-    @PostConstruct
-    void loadScrapingScript() throws ClassNotFoundException {
-        Class.forName("com.example.demo.scraping.Bahamut");
-    }
-
     public ScraperService(@Autowired ChromeOptions options) {
         this.options = options;
         driver = new ChromeDriver(options);
