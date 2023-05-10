@@ -45,7 +45,7 @@ final public class Bahamut implements Scraper{
                     .getAttribute("href");
 
 
-            return new Drama("Bahamut", animeName, animePicUrl, animeVideoUrl);
+            return new Drama("bahamut", animeName, animePicUrl, animeVideoUrl);
         }).collect(Collectors.toList());
     }
 
@@ -65,7 +65,7 @@ final public class Bahamut implements Scraper{
             String animeVideoUrl = e.getAttribute("href");
 
 
-            return new Drama("Bahamut", animeName, animePicUrl, animeVideoUrl);
+            return new Drama("bahamut", animeName, animePicUrl, animeVideoUrl);
         }).collect(Collectors.toList());
     }
 
