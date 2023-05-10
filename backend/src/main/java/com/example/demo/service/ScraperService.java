@@ -14,26 +14,24 @@ import org.springframework.stereotype.Service;
 import javax.annotation.PreDestroy;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 @Service
 public class ScraperService {
 
-    private final ChromeOptions options;
+    private ChromeOptions options;
     private ChromeDriver driver ;
     private long expire;
     private final Map<String, Tuple<Instant, List<Drama>>> dramasCache =  new HashMap<>();
 
     public ScraperService(
             @Value("${webScrape.cache.expires}") long expire,
-            @Autowired ChromeOptions options
+            @Autowired ChromeOptions options,
+            @Autowired ChromeDriver driver
     ) {
         this.expire = expire;
+        this.driver = driver;
         this.options = options;
-        driver = new ChromeDriver(options);
     }
 
     synchronized public List<Drama> scrape(String url, Function<ChromeDriver, List<Drama>> scraper) {

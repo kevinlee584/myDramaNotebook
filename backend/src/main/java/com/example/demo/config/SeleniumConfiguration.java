@@ -1,6 +1,8 @@
 package com.example.demo.config;
 
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,11 +17,16 @@ public class SeleniumConfiguration {
     }
 
     @Bean
-    public ChromeOptions driver() {
+    public ChromeOptions options() {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         options.addArguments("--headless");
         return options;
+    }
+
+    @Bean
+    public ChromeDriver driver(@Autowired ChromeOptions options) {
+        return new ChromeDriver(options);
     }
 
 }
