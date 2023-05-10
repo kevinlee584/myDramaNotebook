@@ -5,12 +5,11 @@ import com.example.demo.dto.DramaRequestBody;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
-
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -25,15 +24,13 @@ public class ManageDramaController {
         this.userService = userService;
     }
 
-    @PostMapping("/save")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> saveDrama(@RequestBody DramaRequestBody body){
-        DramaRequestBody res = userService.saveDrama(body.getProvider(), body.getName());
-        if (Objects.nonNull(res))
-            return ResponseEntity.status(HttpStatus.CREATED).body(res);
-        else
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
-                    String.format("{ provider: %s, name: %s } not found", body.getProvider(), body.getName()));
+    @PostMapping(value = "/save")
+    @ResponseBody
+    public void saveDrama(@RequestBody DramaRequestBody body, HttpServletResponse response) throws IOException {
+        String res = userService.saveDrama(body.getProvider(), body.getName());
+        response.setContentType("text/plain;charset=UTF-8");
+        response.setStatus(HttpStatus.CREATED.value());
+        response.getWriter().write(String.format("{ provider: %s, name: %s } %s", body.getProvider(), body.getName(), res));
     }
 
     @DeleteMapping("/remove")

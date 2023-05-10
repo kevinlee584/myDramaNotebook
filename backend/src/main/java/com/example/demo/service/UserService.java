@@ -1,6 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.dto.DramaRequestBody;
 import com.example.demo.model.Drama;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ public class UserService {
         this.scraperService = scraperService;
     }
 
-    public DramaRequestBody saveDrama(String providerName, String dramaName){
+    public String saveDrama(String providerName, String dramaName){
         Drama drama = scraperService.getDrama(providerName, dramaName);
         if (Objects.nonNull(drama)) {
             Optional<Drama> d = record.stream()
@@ -31,11 +30,13 @@ public class UserService {
 
             if (d.isEmpty()) {
                 record.add(drama);
-                return new DramaRequestBody(providerName, dramaName);
+                return "saved";
             }
+
+            return "has saved";
         }
 
-        return null;
+        return "not found";
     }
 
     public void removeDrama(String providerName, String dramaName){
