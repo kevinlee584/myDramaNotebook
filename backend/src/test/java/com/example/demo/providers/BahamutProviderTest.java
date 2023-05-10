@@ -3,20 +3,16 @@ package com.example.demo.providers;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
 
 import com.example.demo.model.Drama;
-import com.example.demo.scraping.Scraper;
 import com.example.demo.scraping.ScraperScripts;
 import com.example.demo.service.ScraperService;
 import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.test.web.servlet.MvcResult;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -51,28 +48,41 @@ class BahamutProviderTest{
 
 	@Test
 	public void ShouldSaveAndRemoveDrama() throws Exception {
-		mockMvc.perform(get("/providers"))
+		MvcResult result =  mockMvc.perform(get("/providers"))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$[0].provider").value("bahamut"))
-				.andExpect(jsonPath("$[0].favicon").exists());
+				.andExpect(jsonPath("$[0].favicon").exists())
+				.andExpect(jsonPath("$[0].sorts").exists())
+				.andReturn();
 
+		String json = result.getResponse().getContentAsString();
+		List<Map<String, Map<String, String>>> list = mapper.readValue(json, List.class);
+		String url = list.get(0).get("sorts").entrySet().stream().findFirst().orElseThrow().getValue();
 
-		Scraper scraper = scraperService.getAllScraper().get("bahamut");
-		Optional<Map.Entry<String, Function<ChromeDriver, List<Drama>>>> result =
-				scraper.getScripts().entrySet().stream().findFirst();
+		result = mockMvc.perform(get(url))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$[0].providerName").value("bahamut"))
+				.andExpect(jsonPath("$[0].name").exists())
+				.andExpect(jsonPath("$[0].imageUrl").exists())
+				.andExpect(jsonPath("$[0].videoUrl").exists())
+				.andReturn();
 
-		Assertions.assertTrue(result.isPresent());
+		json = result.getResponse().getContentAsString(StandardCharsets.UTF_8);
 
-		Map.Entry<String, Function<ChromeDriver, List<Drama>>> p = result.get();
-		Drama drama= scraperService.scrape("/provider/bahamut/" + p.getKey(), p.getValue()).get(0);
-		Map<String, String> m = Map.of("provider", drama.getProviderName(), "name", drama.getName());
-		String json = mapper.writeValueAsString(m);
+		List<Map<String, String>> list2 = mapper.readValue(json, List.class);
+		Map<String, String> m = list2.get(0);
+
+		Drama drama = new Drama(m.get("providerName"), m.get("name"), m.get("imageUrl"), m.get("videoUrl"));
+		String request = mapper.writeValueAsString(Map.of(
+				"provider", drama.getProviderName(),
+				"name", drama.getName()
+		));
 
 		mockMvc.perform(post("/user/save")
 				.contentType(MediaType.APPLICATION_JSON)
-				.content(json))
+				.content(request))
 				.andExpect(status().isCreated())
-				.andExpect(content().json(json));
+				.andExpect(content().string(String.format("{ provider: %s, name: %s } saved", drama.getProviderName(), drama.getName())));
 
 		mockMvc.perform(get("/user/record"))
 				.andExpect(status().isOk())
@@ -83,7 +93,7 @@ class BahamutProviderTest{
 
 		mockMvc.perform(delete("/user/remove")
 						.contentType(MediaType.APPLICATION_JSON)
-						.content(json))
+						.content(request))
 				.andExpect(status().isNoContent());
 
 		mockMvc.perform(get("/user/record"))

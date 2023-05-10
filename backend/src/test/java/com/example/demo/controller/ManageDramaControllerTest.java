@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import static org.mockito.Mockito.mock;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -43,7 +44,7 @@ class ManageDramaControllerTest {
     @Test
     public void shouldSaveDrama() throws Exception {
         when(userService.saveDrama("test", "test"))
-                .thenReturn(new DramaRequestBody("test", "test"));
+                .thenReturn("saved");
 
         when(userService.getRecord())
                 .thenReturn(List.of(new Drama("test", "test", "testUrl", "testUrl")));
@@ -55,10 +56,11 @@ class ManageDramaControllerTest {
         String resBody = objectMapper.writeValueAsString(new Drama("test", "test", "testUrl", "testUrl"));
 
         mvc.perform(post("/user/save")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(reqBody))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(reqBody))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(reqBody));
+                .andDo(print())
+                .andExpect(content().string("{ provider: test, name: test } saved"));
 
         mvc.perform(get("/user/record"))
                 .andExpect(status().isOk())
@@ -72,7 +74,7 @@ class ManageDramaControllerTest {
     @Test
     public void shouldRemoveDrama() throws Exception {
         when(userService.saveDrama("test", "test"))
-                .thenReturn(new DramaRequestBody("test", "test"));
+                .thenReturn("saved");
 
         when(userService.getRecord())
                 .thenReturn(Collections.EMPTY_LIST);
@@ -85,7 +87,7 @@ class ManageDramaControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(reqBody))
                 .andExpect(status().isCreated())
-                .andExpect(content().json(reqBody));
+                .andExpect(content().string("{ provider: test, name: test } saved"));
 
         mvc.perform(delete("/user/remove")
                         .contentType(MediaType.APPLICATION_JSON)
