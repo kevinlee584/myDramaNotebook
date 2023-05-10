@@ -5,9 +5,11 @@ import com.example.demo.dto.DramaRequestBody;
 import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -25,8 +27,13 @@ public class ManageDramaController {
 
     @PostMapping("/save")
     @ResponseStatus(HttpStatus.CREATED)
-    public DramaRequestBody saveDrama(@RequestBody DramaRequestBody body){
-        return userService.saveDrama(body.getProvider(), body.getName());
+    public ResponseEntity<?> saveDrama(@RequestBody DramaRequestBody body){
+        DramaRequestBody res = userService.saveDrama(body.getProvider(), body.getName());
+        if (Objects.nonNull(res))
+            return ResponseEntity.status(HttpStatus.CREATED).body(res);
+        else
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
+                    String.format("{ provider: %s, name: %s } not found", body.getProvider(), body.getName()));
     }
 
     @DeleteMapping("/remove")
