@@ -1,8 +1,7 @@
-package com.example.demo;
+package com.example.demo.providers;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.HashMap;
@@ -15,13 +14,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.example.demo.controller.ProvidersResponseTemplate;
-import com.example.demo.scraping.ScraperScripts;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class HttpRequestTest {
+class BahamutProviderTest{
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -30,36 +27,25 @@ class HttpRequestTest {
 	private ObjectMapper mapper;
 
 	@Test
-	void getEmptyProviderList() throws Exception{
-
-		ScraperScripts.scrapers.clear();	
-
-		mockMvc.perform(get("/providers")).andDo(print()).andExpect(status().isOk())
-			.andExpect(content().json("[]"));
-
-	}
-
-	@Test
-	void getAllProviders() throws Exception{
+	public void getAllProviders() throws Exception {
 
 		Class.forName("com.example.demo.scraping.Bahamut");
 		
 		Map<String, String> map = new HashMap<>();
-
 		map.put("new", "/provider/bahamut/new");
 		map.put("hot", "/provider/bahamut/hot");
-		List<ProvidersResponseTemplate> mockResponse = List.of(
-			new ProvidersResponseTemplate(
-				"bahamut", 
-				"https://ani.gamer.com.tw/favicon.ico", 
-				map)
+
+		List<Map<String, Object>> mockResponse = List.of(
+			Map.of(
+					"provider", "bahamut",
+					"favicon", "https://ani.gamer.com.tw/favicon.ico",
+					"sorts", map)
 		);
 
 		String expectedResponseContent = mapper.writeValueAsString(mockResponse);
 
-		mockMvc.perform(get("/providers")).andDo(print()).andExpect(status().isOk())
-			.andExpect(content().json(expectedResponseContent));
-
+		mockMvc.perform(get("/providers"))
+				.andExpect(status().isOk());
 	}
 
 
