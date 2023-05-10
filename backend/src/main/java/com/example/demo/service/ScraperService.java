@@ -34,17 +34,24 @@ public class ScraperService {
         this.options = options;
     }
 
-    synchronized public List<Drama> scrape(String url, Function<ChromeDriver, List<Drama>> scraper) {
+    synchronized public List<Drama> scrape(String provider, String sort) {
 
-        var list = dramasCache.get(url);
+        String url = String.format("/provider/%s/%s", provider, sort);
+        Tuple<Instant, List<Drama>> list = dramasCache.get(url);
 
         if (list == null || Duration.between(Instant.now(), list.x).toMillis() > expire) {
+
+            Optional<Scraper> scraper = ScraperScripts.scrapers.stream().filter(s -> s.getProvider().getName().equals(provider)).findFirst();
+            if (scraper.isEmpty()) return null;
+
+            Function<ChromeDriver, List<Drama>> script = scraper.get().getScripts().get(sort);
+            if (Objects.isNull(script)) return null;
 
             WebDriverException error = null;
 
             for (int i=0; i<2; ++i) {
                 try {
-                    var result =scraper.apply(driver);
+                    var result =script.apply(driver);
                     dramasCache.put(url, new Tuple<>(Instant.now(), result));
                     return result;
 
@@ -62,10 +69,6 @@ public class ScraperService {
 
     }
 
-    public Map<String, Scraper> getAllScraper() {
-        return ScraperScripts.scrapers;
-    }
-
     public Drama getDrama(String provider, String drama) {
 
         Optional<Drama> result =  dramasCache.entrySet().stream()
@@ -75,6 +78,10 @@ public class ScraperService {
                 .findFirst();
 
         return result.orElse(null);
+    }
+
+    public List<? extends Scraper> getAllScraper() {
+        return ScraperScripts.scrapers;
     }
 
     @PreDestroy

@@ -24,7 +24,7 @@ final public class Bahamut implements Scraper{
 
 
     static {
-        ScraperScripts.scrapers.put("bahamut", new Bahamut());
+        ScraperScripts.scrapers.add(new Bahamut());
     }
 
     private List<Drama> getNewDramas(ChromeDriver driver) {

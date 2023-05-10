@@ -1,9 +1,9 @@
 package com.example.demo.scraping;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.LinkedList;
+import java.util.List;
 
 public class ScraperScripts {
 
-    public static Map<String, Scraper> scrapers  = new HashMap<>();
+    public static List<Scraper> scrapers  = new LinkedList<>();
 }
