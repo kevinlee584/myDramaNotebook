@@ -43,4 +43,9 @@ public class ManageDramaController {
     public List<Drama> getAllRecord(){
         return userService.getRecord();
     }
+
+    @GetMapping("/clean")
+    public void cleanRecord(){
+        userService.getRecord().clear();
+    }
 }
