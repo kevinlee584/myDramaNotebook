@@ -87,3 +87,9 @@
     position: relative;
     flex: auto;
 }
+
+.provider-block svg {
+    height: 80% !important;
+    width: 100% !important;
+    border: 0px;
+}

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import '../css/sidebarmenu.css'
 import actionMap from './actionMap'
 import config from '../../../config'
+import VideoesImage from "../static/icons/videoes.svg"
 
 
 const serverUrl = config.backend.url
@@ -66,6 +67,16 @@ const MenuBar = function() {
                 </div>
             ))
         }
+
+        list.push(
+            <div className='provider-block' key={"recordProvider"} onClick={() => {
+                actionMap.get("setPage")("record")
+                const action = actionMap.get("controllMenuView")
+                if (action) action()
+            }}>
+                <VideoesImage></VideoesImage>
+            </div>
+        )
         
         return (
             <>
