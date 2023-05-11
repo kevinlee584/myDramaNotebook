@@ -10,12 +10,14 @@ import config from '../../../config'
 const serverUrl = config.backend.url
 const dramaMap = new Map()
 
+
 const App = () => {
 
 	const [error, setError] = useState(null);
 	const [isLoaded, setIsLoaded] = useState(false);
 	const [items, setItems] = useState([[], null]);
 	const [page, setPage] = useState(null)
+	const [record, setRecord] = useState([])
 
 	// initialize page
 	useEffect(() => {
@@ -32,7 +34,6 @@ const App = () => {
 			setError(error)
 		})
 	}, [])
-
 
 	useEffect(() => {
 		if (!page) return
@@ -69,6 +70,15 @@ const App = () => {
 		
 	}, [page])
 
+
+	useEffect(() => {
+		fetch(`${serverUrl}/user/record`)
+		.then(res => res.json())
+		.then(res => {
+			setRecord(res)
+		})
+	}, [])
+
 	if (error) {
 		return <div>Error: {error.message}</div>;
 	} else if (!isLoaded) {
@@ -79,7 +89,10 @@ const App = () => {
 	} else {
 		var boxs = [];
 		for(let i=0; i<Math.min(items[0].length, items[1]); ++i)
-			boxs.push(<Box key={items[0][i].name} imageUrl={items[0][i].imageUrl} videoUrl={items[0][i].videoUrl} videoName={items[0][i].name}></Box>)
+			boxs.push(<Box key={items[0][i].name} 
+				drama={items[0][i]}
+				record={record}
+				setRecord={setRecord}></Box>)
 
 		var reload = () => {
 			setPage(`update: ${page}`)

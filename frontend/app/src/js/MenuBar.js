@@ -52,7 +52,7 @@ const MenuBar = function() {
             setSelectedBlocker((n & selectedBlocker) == n ? 0 : n)
         }
 
-        var clickSort = (sortUrl) => () => {
+        var clickSort = (sortUrl) => {
             actionMap.get("setPage")(`${serverUrl}${sortUrl}`)
         }
 
@@ -79,7 +79,10 @@ const MenuBar = function() {
                                 {
                                     Object.entries(providers[Math.log2(selectedBlocker)].sorts)
                                         .map(e => (
-                                            <div className='sort-blocker' key={providers[Math.log2(selectedBlocker)].provider + e[0]} onClick={clickSort(e[1])}>
+                                            <div className='sort-blocker' key={providers[Math.log2(selectedBlocker)].provider + e[0]} onClick={() => {
+                                                    clickSort(e[1])
+                                                    const action = actionMap.get("controllMenuView")
+                                                    if (action) action()}}>
                                                 <p>{ e[0] }</p>
                                             </div>))
                                 }
