@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import static org.mockito.Mockito.mock;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -13,53 +12,42 @@ import com.example.demo.model.Drama;
 import com.example.demo.dto.DramaRequestBody;
 import com.example.demo.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InOrder;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Collections;
 import java.util.List;
 
-
+@WebMvcTest(ManageDramaController.class)
 class ManageDramaControllerTest {
 
+    @Autowired
     private MockMvc mvc;
+    @MockBean
     private UserService userService;
 
     final private ObjectMapper objectMapper = new ObjectMapper();
 
-    @BeforeEach
-    public void setup() {
-        userService = mock(UserService.class);
-        MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter(objectMapper);
-        mvc = MockMvcBuilders.standaloneSetup(new ManageDramaController(userService)).setMessageConverters(converter).build();
-    }
-
-
     @Test
     public void shouldSaveDrama() throws Exception {
-        when(userService.saveDrama("test", "test"))
-                .thenReturn("saved");
-
-        when(userService.getRecord())
-                .thenReturn(List.of(new Drama("test", "test", "testUrl", "testUrl")));
-
+        Drama drama = new Drama("test", "test", "testUrl", "testUrl");
+        when(userService.saveDrama("test", "test")).thenReturn("saved");
+        when(userService.getRecord()).thenReturn(List.of(drama));
         InOrder inOrder = Mockito.inOrder(userService);
 
-
         String reqBody = objectMapper.writeValueAsString(new DramaRequestBody("test", "test"));
-        String resBody = objectMapper.writeValueAsString(new Drama("test", "test", "testUrl", "testUrl"));
+        String resBody = objectMapper.writeValueAsString(drama);
 
         mvc.perform(post("/user/save")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(reqBody))
                 .andExpect(status().isCreated())
-                .andDo(print())
                 .andExpect(content().string("{ provider: test, name: test } saved"));
 
         mvc.perform(get("/user/record"))
@@ -68,17 +56,12 @@ class ManageDramaControllerTest {
 
         inOrder.verify(userService).saveDrama("test", "test");
         inOrder.verify(userService).getRecord();
-
     }
 
     @Test
     public void shouldRemoveDrama() throws Exception {
-        when(userService.saveDrama("test", "test"))
-                .thenReturn("saved");
-
-        when(userService.getRecord())
-                .thenReturn(Collections.EMPTY_LIST);
-
+        when(userService.saveDrama("test", "test")).thenReturn("saved");
+        when(userService.getRecord()).thenReturn(Collections.EMPTY_LIST);
         InOrder inOrder = Mockito.inOrder(userService);
 
         String reqBody = objectMapper.writeValueAsString(new DramaRequestBody("test", "test"));
