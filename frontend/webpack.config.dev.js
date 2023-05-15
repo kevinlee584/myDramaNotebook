@@ -1,7 +1,6 @@
 var path = require('path')
 var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
-var config = require('./config')
 
 module.exports = {
   mode: 'development',
@@ -58,6 +57,6 @@ module.exports = {
     compress: true,
     hot: true,
     open: true,
-    port: config.app.port
+    port: 3000
   }
 }

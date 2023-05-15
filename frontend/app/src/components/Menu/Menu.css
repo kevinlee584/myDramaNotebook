@@ -1,0 +1,96 @@
+#menu {
+    width: 100%;
+    height: calc(100% - 32px);
+    position: absolute;
+    top: 0%;
+    margin-top: 32px;
+    display: flex;
+    user-select: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.menu-block {
+    width: 20%;
+    background-color: #ffad33;
+    position: relative;
+    border-right: 1px solid black;
+}
+
+.provider-block {
+    height: 60px;
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+}
+
+.provider-block:hover {
+    background: rgba(255,255,255,0.2);
+}
+
+.provider-icon {
+    height: 45px;
+    width: 45px;
+    position: relative;
+}
+
+
+.provider-name {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    width: 65%;
+    justify-content: center;
+}
+
+.provider-name p {
+    font-family: Arial Black, Helvetica, sans-serif;
+    font-size: 20px;
+}
+
+.provider-block-text {
+    border: 5px solid red;
+    background-color: red;
+    border-radius: 10px;
+    color: aliceblue;
+}
+
+
+.provider-name:hover {
+    background-color: aliceblue;
+    border-radius: 10px;
+}
+
+.sort-block {
+    width: 30%;
+    background-color: #ffc266;
+    position: relative;
+    border-right: 1px solid black;
+}
+
+.sort-blocker {
+    height: 45px;
+    display: flex;
+    align-items:center;
+    justify-content:center;
+    box-sizing: border-box;
+}
+
+.sort-blocker:hover{
+    background: rgba(255,255,255,0.2);
+}
+
+.background-blur-layer {
+    width: auto;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    position: relative;
+    flex: auto;
+}
+
+.provider-block svg {
+    height: 80% !important;
+    width: 100% !important;
+    border: 0px;
+}
