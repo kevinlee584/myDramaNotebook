@@ -5,8 +5,6 @@ import "./Page.css"
 
 function Page({dramas, record, reload}){
 
-	console.log("page")
-
     const [showed, setShowed] = useState(10)
 
     useEffect(() => {

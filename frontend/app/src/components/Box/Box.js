@@ -13,14 +13,14 @@ const Box = ({ drama, record }) => {
         event.preventDefault()
         if (isSaved) {
             RecordService.removeDrama(providerName, name)
-                .then(res => {
-                    setIsSaved(false)
-                    let index = record.findIndex(e => e.providerName == providerName && e.name == name)
-                    record.splice(index, 1)
+            .then(_res => {
+                setIsSaved(false)
+                let index = record.findIndex(e => e.providerName == providerName && e.name == name)
+                record.splice(index, 1)
                 })
         }else {
             RecordService.addDrama(providerName, name)
-            .then(res => {
+            .then(_res => {
                 setIsSaved(true)
                 record.push(drama)
             })

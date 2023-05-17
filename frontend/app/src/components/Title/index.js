@@ -19,5 +19,4 @@ export default function({setPage}) {
         <Menu providers={providers} showMenu={showMenu} setShowMenu={setShowMenu} setPage={setPage}></Menu>
         </>
     )
-
 }

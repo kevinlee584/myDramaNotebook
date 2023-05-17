@@ -38,8 +38,6 @@ class Service {
             .then(res => resolve(res))
         })
     }
-    
-
 }
 
 const RecordService = new Service()
