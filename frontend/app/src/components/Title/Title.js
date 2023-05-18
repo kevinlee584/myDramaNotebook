@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 
 import "./Title.css"
 import "./min-w-10.png";

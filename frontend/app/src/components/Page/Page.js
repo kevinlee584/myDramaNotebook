@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Reload from "./reload.svg"
 import Box from "../Box"
 import "./Page.css"

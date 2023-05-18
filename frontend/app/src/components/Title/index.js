@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Title from "./Title";
 import Menu from "../Menu"
 import ProviderService from "../../service/ProviderService";

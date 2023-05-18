@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import RecordService from "../../service/RecordService"
+import "./Box.css";
 import Save from "./save.svg"
 import Saved from "./saved.svg"
-import "./Box.css";
 
 const Box = ({ drama, record }) => {
 
