@@ -15,6 +15,8 @@
     background-color: #ffad33;
     position: relative;
     border-right: 1px solid black;
+    padding: 0px;
+    margin: 0px;
 }
 
 .provider-block {
@@ -67,6 +69,8 @@
     background-color: #ffc266;
     position: relative;
     border-right: 1px solid black;
+    padding: 0px;
+    margin: 0px;
 }
 
 .sort-blocker {
