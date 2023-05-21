@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Box renders correctly 1`] = `
+<DocumentFragment>
+  <div
+    class="box"
+  >
+    <a
+      class="video-block"
+      href="testUrl"
+      target="_blank"
+    >
+      <img
+        class="video-image"
+        src="testUrl"
+      />
+      <div
+        class="video-name-blocker"
+      >
+        <div
+          class="video-name"
+        >
+          <p>
+            test
+          </p>
+          <p>
+            test
+          </p>
+        </div>
+      </div>
+      <button
+        class="save-button"
+      >
+        <div>
+          Save
+        </div>
+      </button>
+    </a>
+  </div>
+</DocumentFragment>
+`;
