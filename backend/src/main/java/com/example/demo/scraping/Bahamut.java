@@ -45,7 +45,7 @@ final public class Bahamut implements Scraper{
 
         return animates.stream().map(e -> {
             try {
-                String animeName = e.selectFirst(".anime-name > p").attr("textContent");
+                String animeName = e.selectFirst(".anime-name > p").text();
                 String animePicUrl = e.selectFirst(".anime-blocker > img").attr("data-src");
                 String animeVideoUrl = e.selectFirst(".anime-card-block").attr("href");
 
@@ -68,7 +68,7 @@ final public class Bahamut implements Scraper{
 
         return animates.stream().map(e -> {
             try {
-                String animeName = e.selectFirst(".theme-info-block > p").attr("textContent");
+                String animeName = e.selectFirst(".theme-info-block > p").text();
                 String animePicUrl = e.selectFirst("img").attr("data-src");
                 String animeVideoUrl = e.attr("href");
 
