@@ -1,3 +1,5 @@
 #!/bin/bash
-kill  $(cat ./pid.file)
+while kill $(cat ./pid.file) 2>/dev/null; do 
+    sleep 1
+done
 rm ./pid.file
