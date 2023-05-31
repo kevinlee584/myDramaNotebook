@@ -3,16 +3,15 @@ var webpack = require('webpack')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = {
-  devtool: 'source-map',
   mode: 'production',
-  entry: ['./src/index.js'],
+  entry: ['./app/src/index.js'],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'app/dist'),
     filename: 'bundle.js'
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: './src/static/index.html'
+      template: './app/src/index.html'
     })
   ],
   module: {
@@ -31,13 +30,6 @@ module.exports = {
         use: ["style-loader", "css-loader"],
       },
       {
-        test: /\.scss$/,
-        use:[
-          "style-loader",
-          "css-loader",
-        ],
-      },
-      {
         test: /\.(png|jpe?g|gif)$/i,
         use: [
           {
@@ -48,7 +40,11 @@ module.exports = {
             }
           }
         ]
-      }
+      }, 
+      {
+        test: /\.svg$/i,
+        use: "@svgr/webpack",
+      },
     ], 
   },
 }

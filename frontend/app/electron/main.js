@@ -4,7 +4,7 @@
 const { app, screen, BrowserWindow, ipcMain, shell  } = require('electron')
 const path = require('path')
 
-const isDev = false
+const isDev = process.env.isdev == "true" ? true : false
 
 function createWindow () {
 	const {width,height} = screen.getPrimaryDisplay().workAreaSize;
@@ -19,8 +19,7 @@ function createWindow () {
 		frame: false,
 	})
 
-	// win.loadFile('index.html')
-	win.loadURL("http://localhost:3000/")
+	isDev ? win.loadURL("http://localhost:3000/") : win.loadFile('../dist/index.html')
 
 
 	if (isDev)
