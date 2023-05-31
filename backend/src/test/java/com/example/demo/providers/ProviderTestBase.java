@@ -53,6 +53,11 @@ public class ProviderTestBase {
             List<Map<String, String>> dramas = mapper.readValue(json, List.class);
 
             Assertions.assertTrue(dramas.size() > 0, String.format("/provider/%s/%s is EMPTY", provider, sort));
+
+            for(var drama : dramas) {
+                Assertions.assertNotNull(drama.get("name"));
+                Assertions.assertFalse(drama.get("name").isBlank());
+            }
         }
     }
 }
