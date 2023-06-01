@@ -1,6 +1,7 @@
 **/node_modules
 
 HELP.md
+*.dat
 target/
 /bin/pid.file
 frontend/app/dist/
