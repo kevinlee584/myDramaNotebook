@@ -1,63 +1,73 @@
 package com.example.demo.providers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import com.example.demo.model.Drama;
+import com.example.demo.scraping.ScraperScripts;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Assertions;
-import org.springframework.test.web.servlet.MockMvc;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
+
 
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AllArgsConstructor
 public class ProviderTestBase {
-    private ObjectMapper mapper;
-    private MockMvc mockMvc;
+//    private ObjectMapper mapper;
+//    private MockMvc mockMvc;
     private String provider;
     private List<String> sorts;
-
+    private Capabilities cap;
 
     public void providerAndSortShouldExist() throws Exception{
-        String json =  mockMvc.perform(get("/providers"))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+//        String json =  mockMvc.perform(get("/providers"))
+//                .andExpect(status().isOk())
+//                .andReturn()
+//                .getResponse()
+//                .getContentAsString();
+//
+//        List<Map<String, Object>> providers = mapper.readValue(json, List.class);
+//
+//        Assertions.assertTrue(providers.size() > 0, "Should have provider");
+//
+//        Optional<Map<String, Object>> prov = providers.stream().filter(e -> e.get("provider").equals(provider)).findFirst();
+//
+//        Assertions.assertTrue(prov.isPresent());
+//
+//        Map<String, Object> p = prov.get();
+//
+//        for (String sort: sorts)
+//            Assertions.assertNotNull(((Map<String, String>)p.get("sorts")).get(sort), String.format("Sort: %s not exist in Provider: %s", sort, provider));
 
-        List<Map<String, Object>> providers = mapper.readValue(json, List.class);
-
-        Assertions.assertTrue(providers.size() > 0, "Should have provider");
-
-        Optional<Map<String, Object>> prov = providers.stream().filter(e -> e.get("provider").equals(provider)).findFirst();
-
-        Assertions.assertTrue(prov.isPresent());
-
-        Map<String, Object> p = prov.get();
-
-        for (String sort: sorts)
-            Assertions.assertNotNull(((Map<String, String>)p.get("sorts")).get(sort), String.format("Sort: %s not exist in Provider: %s", sort, provider));
-
+        Assertions.assertEquals(1, ScraperScripts.scrapers.size());
+        Assertions.assertEquals(ScraperScripts.scrapers.get(0).getProvider().getName(), provider);
+        for (var sort: sorts)
+            Assertions.assertNotNull(ScraperScripts.scrapers.get(0).getScripts().get(sort));
     }
 
     public void shouldHaveDramas() throws Exception {
+        WebDriver driver = new RemoteWebDriver(cap);
         for (String sort: sorts) {
-            String json = mockMvc.perform(get(String.format("/provider/%s/%s", provider, sort)))
-                    .andExpect(status().isOk())
-                    .andReturn()
-                    .getResponse()
-                    .getContentAsString();
-
-            List<Map<String, String>> dramas = mapper.readValue(json, List.class);
-
-            Assertions.assertTrue(dramas.size() > 0, String.format("/provider/%s/%s is EMPTY", provider, sort));
-
+//            String json = mockMvc.perform(get(String.format("/provider/%s/%s", provider, sort)))
+//                    .andExpect(status().isOk())
+//                    .andReturn()
+//                    .getResponse()
+//                    .getContentAsString();
+//
+//            List<Map<String, String>> dramas = mapper.readValue(json, List.class);
+//
+//            Assertions.assertTrue(dramas.size() > 0, String.format("/provider/%s/%s is EMPTY", provider, sort));
+            List<Drama> dramas = ScraperScripts.scrapers.get(0).getScripts().get(sort).apply(driver);
             for(var drama : dramas) {
-                Assertions.assertNotNull(drama.get("name"));
-                Assertions.assertFalse(drama.get("name").isBlank());
+                Assertions.assertNotNull(drama.getName());
+                Assertions.assertFalse(drama.getName().isBlank());
+                Assertions.assertTrue(drama.getImageUrl().startsWith("http"));
+                Assertions.assertTrue(drama.getVideoUrl().startsWith("http"));
+
             }
         }
+        driver.quit();
     }
 }

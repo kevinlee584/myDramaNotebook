@@ -7,28 +7,16 @@ import com.example.demo.scraping.ScraperScripts;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.web.servlet.MockMvc;
+import org.openqa.selenium.Capabilities;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-@AutoConfigureMockMvc
 class BahamutProviderTest extends ProviderTestBase{
 
-	@Autowired
-	private MockMvc mockMvc;
-
-	@Autowired
-	private ObjectMapper mapper;
-
-	public BahamutProviderTest(
-			@Autowired MockMvc mockMvc,
-			@Autowired ObjectMapper mapper
-	){
-		super(mapper, mockMvc, "bahamut", List.of("new", "hot"));
+	public BahamutProviderTest(@Autowired Capabilities cap){
+		super("bahamut", List.of("new", "hot"), cap);
 	}
 
 	@BeforeAll
