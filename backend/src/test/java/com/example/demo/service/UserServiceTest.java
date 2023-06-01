@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.model.Drama;
+import com.example.demo.repo.RecordRepository;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -12,15 +13,15 @@ class UserServiceTest {
 
     public UserServiceTest(){
         scraperService = Mockito.mock(ScraperService.class);
-        userService = new UserService(scraperService);
+        RecordRepository recordRepository = Mockito.mock(RecordRepository.class);
+        userService = new UserService(scraperService, recordRepository);
     }
     @Test
     void saveDrama() {
         Drama drama = new Drama("test", "test", "testUrl", "testUrl");
         Mockito.when(scraperService.getDrama("test", "test")).thenReturn(drama);
+        String result = userService.saveDrama("test", "test");
 
-        userService.saveDrama("test", "test");
-
-        assertEquals(userService.getRecord().size(), 1);
+        assertEquals(result, "saved");
     }
 }

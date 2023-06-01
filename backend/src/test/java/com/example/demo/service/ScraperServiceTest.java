@@ -7,7 +7,8 @@ import com.example.demo.scraping.ScraperScripts;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 
 import java.util.List;
 import java.util.Map;
@@ -15,18 +16,17 @@ import java.util.function.Function;
 
 class ScraperServiceTest {
     private ScraperService scraperService;
-    private Scraper scraper;
 
     public ScraperServiceTest(){
-        scraperService = new ScraperService(30_000, null, null);
+        scraperService = new ScraperService(30_000, new ChromeOptions());
     }
     @BeforeAll
     public static void setup(){
         Drama drama = new Drama("test", "test", "testUrl", "testUrl");
-        Function<ChromeDriver, List<Drama>> script = _driver -> List.of(drama);
+        Function<WebDriver, List<Drama>> script = _driver -> List.of(drama);
         ScraperScripts.scrapers.add(new Scraper() {
             @Override
-            public Map<String, Function<ChromeDriver, List<Drama>>> getScripts() {
+            public Map<String, Function<WebDriver, List<Drama>>> getScripts() {
                 return Map.of("test", script);
             }
 
