@@ -1,32 +1,29 @@
 package com.example.demo.config;
 
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.Platform;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.annotation.PostConstruct;
 
 @Configuration
 public class SeleniumConfiguration {
 
-    @PostConstruct
-    void postConstruct() {
-        System.setProperty("webdriver.chrome.driver", "C:/Users/kevin/bin/chromedriver.exe");
+    public SeleniumConfiguration(@Value("${webdriver.remote.server}") String url) {
+        System.setProperty("webdriver.remote.server", url);
     }
-
     @Bean
-    public ChromeOptions options() {
+    public Capabilities driverCapabilities() {
+        DesiredCapabilities cap=new DesiredCapabilities();
+        cap.setBrowserName("chrome");
+        cap.setPlatform(Platform.LINUX);
+
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-        options.addArguments("--headless");
+        options.merge(cap);
+        options.setHeadless(true);
+
         return options;
     }
-
-    @Bean
-    public ChromeDriver driver(@Autowired ChromeOptions options) {
-        return new ChromeDriver(options);
-    }
-
 }

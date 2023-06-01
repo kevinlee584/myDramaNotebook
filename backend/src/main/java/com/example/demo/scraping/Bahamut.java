@@ -7,8 +7,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -31,7 +31,7 @@ final public class Bahamut implements Scraper{
         ScraperScripts.scrapers.add(new Bahamut());
     }
 
-    private List<Drama> getNewDramas(ChromeDriver driver) {
+    private List<Drama> getNewDramas(WebDriver driver) {
         driver.get(url);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
@@ -42,12 +42,16 @@ final public class Bahamut implements Scraper{
         Document document = Jsoup.parse(block.getAttribute("innerHTML"));
         Elements animates = document.select(".anime-block");
 
-
         return animates.stream().map(e -> {
             try {
                 String animeName = e.selectFirst(".anime-name > p").text();
                 String animePicUrl = e.selectFirst(".anime-blocker > img").attr("data-src");
                 String animeVideoUrl = e.selectFirst(".anime-card-block").attr("href");
+
+                if (!animePicUrl.startsWith("http"))
+                    animePicUrl = String.format("%s/%s", url, animePicUrl);
+                if (!animeVideoUrl.startsWith("http"))
+                    animeVideoUrl = String.format("%s/%s", url, animeVideoUrl);
 
                 return new Drama("bahamut", animeName, animePicUrl, animeVideoUrl);
             } catch (NullPointerException error) {
@@ -56,7 +60,7 @@ final public class Bahamut implements Scraper{
         }).filter(Objects::nonNull).collect(Collectors.toList());
     }
 
-    private List<Drama> getHotDramas(ChromeDriver driver) {
+    private List<Drama> getHotDramas(WebDriver driver) {
         driver.get(url);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
@@ -72,6 +76,11 @@ final public class Bahamut implements Scraper{
                 String animePicUrl = e.selectFirst("img").attr("data-src");
                 String animeVideoUrl = e.attr("href");
 
+                if (!animePicUrl.startsWith("http"))
+                    animePicUrl = String.format("%s/%s", url, animePicUrl);
+                if (!animeVideoUrl.startsWith("http"))
+                    animeVideoUrl = String.format("%s/%s", url, animeVideoUrl);
+
                 return new Drama("bahamut", animeName, animePicUrl, animeVideoUrl);
             }catch (NullPointerException error) {
                 return null;
@@ -80,7 +89,7 @@ final public class Bahamut implements Scraper{
     }
 
     @Override
-    public Map<String, Function<ChromeDriver, List<Drama>>> getScripts() {
+    public Map<String, Function<WebDriver, List<Drama>>> getScripts() {
         return Map.of(
                 "new", this::getNewDramas,
                 "hot", this::getHotDramas
