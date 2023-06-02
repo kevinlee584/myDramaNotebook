@@ -1,12 +1,15 @@
 package com.example.demo.repo;
 
 import com.example.demo.model.Drama;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -15,15 +18,19 @@ import java.util.Objects;
 @Repository
 public class RecordRepository {
     private List<Drama> record = new ArrayList<>();
-    private String fileName = "dramasRecord.dat";
+    private String fileLocation = "dramasRecord.dat";
 
     public RecordRepository() {
 
-        if (Objects.nonNull(System.getenv("user.home"))) {
-            fileName = String.format("%s\\%s", System.getenv("user.home"), fileName);
+        Logger logger = LoggerFactory.getLogger(RecordRepository.class);
+
+        if (Objects.nonNull(System.getProperty("user.home"))) {
+            fileLocation = Paths.get(System.getProperty("user.home"), fileLocation).toString();
         }
 
-        try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(fileName))){
+        logger.info("FileLocation is " + fileLocation);
+
+        try (ObjectInputStream input = new ObjectInputStream(new FileInputStream(fileLocation))){
             record = (List<Drama>) input.readObject();
         }catch (Exception ignore){}
     }
@@ -48,7 +55,7 @@ public class RecordRepository {
     }
 
     private synchronized void synchronizeRecord() {
-        try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream("dramasRecord.dat"))){
+        try (ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(fileLocation))){
             output.writeObject(record);
         }catch (Exception ignored){}
     }

@@ -5,10 +5,7 @@ import com.example.demo.model.Drama;
 import com.example.demo.scraping.ScraperScripts;
 import lombok.AllArgsConstructor;
 import org.junit.jupiter.api.Assertions;
-import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.remote.RemoteWebDriver;
-
 
 import java.util.List;
 
@@ -19,7 +16,6 @@ public class ProviderTestBase {
 //    private MockMvc mockMvc;
     private String provider;
     private List<String> sorts;
-    private Capabilities cap;
 
     public void providerAndSortShouldExist() throws Exception{
 //        String json =  mockMvc.perform(get("/providers"))
@@ -47,8 +43,7 @@ public class ProviderTestBase {
             Assertions.assertNotNull(ScraperScripts.scrapers.get(0).getScripts().get(sort));
     }
 
-    public void shouldHaveDramas() throws Exception {
-        WebDriver driver = new RemoteWebDriver(cap);
+    public void shouldHaveDramas(WebDriver driver) throws Exception {
         for (String sort: sorts) {
 //            String json = mockMvc.perform(get(String.format("/provider/%s/%s", provider, sort)))
 //                    .andExpect(status().isOk())
@@ -59,15 +54,14 @@ public class ProviderTestBase {
 //            List<Map<String, String>> dramas = mapper.readValue(json, List.class);
 //
 //            Assertions.assertTrue(dramas.size() > 0, String.format("/provider/%s/%s is EMPTY", provider, sort));
+
             List<Drama> dramas = ScraperScripts.scrapers.get(0).getScripts().get(sort).apply(driver);
             for(var drama : dramas) {
                 Assertions.assertNotNull(drama.getName());
                 Assertions.assertFalse(drama.getName().isBlank());
                 Assertions.assertTrue(drama.getImageUrl().startsWith("http"));
                 Assertions.assertTrue(drama.getVideoUrl().startsWith("http"));
-
             }
         }
-        driver.quit();
     }
 }

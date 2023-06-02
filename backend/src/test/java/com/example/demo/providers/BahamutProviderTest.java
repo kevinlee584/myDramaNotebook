@@ -1,22 +1,32 @@
 package com.example.demo.providers;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Properties;
 
+import com.example.demo.config.SeleniumConfiguration;
 import com.example.demo.scraping.ScraperScripts;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-
-@SpringBootTest
 class BahamutProviderTest extends ProviderTestBase{
 
-	public BahamutProviderTest(@Autowired Capabilities cap){
-		super("bahamut", List.of("new", "hot"), cap);
+	private Capabilities cap;
+	public BahamutProviderTest() throws IOException {
+		super("bahamut", List.of("new", "hot"));
+
+		Properties pros = new Properties();
+		ClassLoader loader = BahamutProviderTest.class.getClassLoader();
+		InputStream input = loader.getResourceAsStream("application.properties");
+		pros.load(input);
+
+		this.cap = new SeleniumConfiguration(pros.getProperty("http://localhost:4444")).driverCapabilities();
 	}
 
 	@BeforeAll
@@ -35,9 +45,10 @@ class BahamutProviderTest extends ProviderTestBase{
 		super.providerAndSortShouldExist();
 	}
 
-	@Override
 	@Test
 	public void shouldHaveDramas() throws Exception {
-		super.shouldHaveDramas();
+		WebDriver driver = new RemoteWebDriver(cap);
+		super.shouldHaveDramas(driver);
+		driver.quit();
 	}
 }

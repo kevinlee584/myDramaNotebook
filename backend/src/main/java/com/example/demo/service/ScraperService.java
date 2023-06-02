@@ -17,7 +17,7 @@ import java.util.*;
 import java.util.function.Function;
 @Service
 public class ScraperService {
-    private WebDriver driver;
+    private Capabilities cap;
     private long expire;
     private final Map<String, Tuple<Instant, List<Drama>>> dramasCache =  new HashMap<>();
 
@@ -26,9 +26,7 @@ public class ScraperService {
             @Autowired Capabilities cap
             ) {
         this.expire = expire;
-        this.driver = new RemoteWebDriver(cap);
-
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> this.driver.quit()));
+        this.cap = cap;
     }
 
     synchronized public List<Drama> scrape(String provider, String sort) {
@@ -43,7 +41,10 @@ public class ScraperService {
         Function<WebDriver, List<Drama>> script = scraper.get().getScripts().get(sort);
         if (Objects.isNull(script)) return null;
 
+        WebDriver driver = new RemoteWebDriver(cap);
         var result =script.apply(driver);
+        driver.quit();
+
         dramasCache.put(url, new Tuple<>(Instant.now(), result));
         return result;
     }
