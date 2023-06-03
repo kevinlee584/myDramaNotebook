@@ -9,6 +9,8 @@ services:
       - selenium_server
     environment:
       SELENIUM_SERVER: http://selenium_server:4444
+    volumes:
+      - ~/dramasRecord.dat:/dramasRecord.dat
   selenium_server:
     image: selenium/standalone-chrome:latest
     shm_size: '2g'
