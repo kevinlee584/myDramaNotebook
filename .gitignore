@@ -4,7 +4,6 @@ HELP.md
 *.dat
 target/
 /bin/pid.file
-frontend/app/dist/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
