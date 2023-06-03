@@ -1,2 +1,3 @@
 #!/bin/bash
-npm run start --prefix ../frontend &
+cd ../frontend; npm install --omit=dev
+npm run start &
