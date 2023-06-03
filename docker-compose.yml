@@ -1,0 +1,16 @@
+version: '3'
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - selenium_server
+    environment:
+      SELENIUM_SERVER: http://selenium_server:4444
+  selenium_server:
+    image: selenium/standalone-chrome:latest
+    shm_size: '2g'
+    ports:
+      - "4444:4444"

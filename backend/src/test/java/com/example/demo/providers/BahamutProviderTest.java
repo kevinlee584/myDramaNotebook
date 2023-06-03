@@ -4,7 +4,10 @@ package com.example.demo.providers;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
+import java.util.Objects;
 import java.util.Properties;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.example.demo.config.SeleniumConfiguration;
 import com.example.demo.scraping.ScraperScripts;
@@ -26,7 +29,17 @@ class BahamutProviderTest extends ProviderTestBase{
 		InputStream input = loader.getResourceAsStream("application.properties");
 		pros.load(input);
 
-		this.cap = new SeleniumConfiguration(pros.getProperty("http://localhost:4444")).driverCapabilities();
+		String server = pros.getProperty("webdriver.remote.server");
+		Matcher matcher = Pattern.compile("^\\$\\{(.+?):(.+)}$").matcher(server);
+
+		if (matcher.find() && matcher.groupCount() == 2) {
+			if (Objects.nonNull(System.getenv(matcher.group(1)))) {
+				server = System.getenv(matcher.group(1));
+			}else {
+				server = matcher.group(2);
+			}
+		}
+		this.cap = new SeleniumConfiguration(server).driverCapabilities();
 	}
 
 	@BeforeAll

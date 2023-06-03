@@ -1,4 +1,14 @@
 #!/bin/bash
 
 npm run test:unit --prefix ../frontend
-mvn -f ../backend/pom.xml test
+
+cd ../
+docker compose up -d --build selenium_server
+
+cd ./backend
+./mvnw test
+
+cd ../
+docker compose down
+
+cd ./bin
