@@ -1,0 +1,43 @@
+=== Pre-requisites
+
+* Java 11 and NPM
+* Docker and Docker Compose
+
+=== Building Backend Services
+
+Before running the app
+
+[source]
+----
+./bin/build-backend.sh
+----
+
+=== Running Application
+
+Run app using this command:
+
+[source]
+----
+./bin/start-backend.sh && ./bin/start-frontend.sh
+----
+
+=== Stopping Backend Services
+
+[source]
+----
+./bin/stop-backend.sh
+----
+
+=== Demo
+
+view dramas
+
+image::_media/view.gif[]
+
+save record
+
+image::_media/save.gif[]
+
+remove recode
+
+image::_media/remove.gif[]
