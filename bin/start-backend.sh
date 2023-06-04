@@ -1,3 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-cd ../; docker compose up -d
+cd $(dirname $( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd ))
+
+docker compose up -d
