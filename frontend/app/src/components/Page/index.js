@@ -3,13 +3,15 @@ import Page from "./Page";
 import Loader from "../Loader"
 
 export default ({page, record, reload}) => {
-    const {isLoad, dramas} = page
+    const {status, dramas} = page
+
+    const statusPage = {
+        "loaded" : () => <Page dramas={dramas} record={record} reload={reload}></Page>, 
+        "loading": () => <Loader></Loader>
+    }
 
     return (
         <div className="frame">
-            { 
-                isLoad ? <Page dramas={dramas} record={record} reload={reload}></Page> 
-                        : <Loader></Loader>
-            }
+            { statusPage[status]() }
         </div>)
 }

@@ -29,8 +29,23 @@ public class ScraperService {
         this.cap = cap;
     }
 
-    synchronized public List<Drama> scrape(String provider, String sort) {
+    private List<Drama> query(Function<WebDriver, List<Drama>> script) {
+        WebDriver driver = new RemoteWebDriver(cap);
+        var result =script.apply(driver);
+        driver.quit();
 
+        return result;
+    }
+
+    public List<Drama> search(String provider, String keyword) {
+        Optional<Scraper> scraper = ScraperScripts.scrapers.stream().filter(s -> s.getProvider().getName().equals(provider)).findFirst();
+        if (scraper.isEmpty()) return Collections.emptyList();
+
+        var script = scraper.get().getSearchScript().apply(keyword);
+        return query(script);
+    }
+
+    public List<Drama> scrape(String provider, String sort) {
         String url = String.format("/provider/%s/%s", provider, sort);
         Tuple<Instant, List<Drama>> list = dramasCache.get(url);
         if (list != null && Duration.between(Instant.now(), list.x).toMillis() < expire) return list.y;
@@ -41,9 +56,7 @@ public class ScraperService {
         Function<WebDriver, List<Drama>> script = scraper.get().getScripts().get(sort);
         if (Objects.isNull(script)) return null;
 
-        WebDriver driver = new RemoteWebDriver(cap);
-        var result =script.apply(driver);
-        driver.quit();
+        var result = query(script);
 
         dramasCache.put(url, new Tuple<>(Instant.now(), result));
         return result;

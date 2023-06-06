@@ -5,6 +5,10 @@ class Service {
     constructor(){
         this.dramaCache = new Map()
         this.serverUrl = "http://localhost:8080"
+        this.headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/plain;charset=UTF-8"
+        }
     }
 
     getDramas(page, cache=true) {
@@ -21,6 +25,18 @@ class Service {
                         resolve(res)
                     })
                 })
+    }
+
+    searchDramas(page, keyword) {
+        return new Promise(resolve => {
+            fetch(this.serverUrl + page, {
+                method: "POST", 
+                headers: this.headers, 
+                body: JSON.stringify(keyword)
+            })
+            .then(res => res.json())
+            .then(res => resolve(res))
+        })
     }
 }
 

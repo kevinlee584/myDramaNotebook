@@ -64,6 +64,38 @@
     border-radius: 10px;
 }
 
+.search_blocker {
+    height: 35px;
+    position: relative;
+    list-style: none;
+}
+
+.search_blocker > form {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search_blocker > form > input{
+    height: 70%;
+    width: 70%;
+}
+
+.search_blocker > form > button{
+    height: 70%;
+    width: 20%;
+}
+
+.search_blocker > form > button > svg{
+    height: 100%;
+    width: 100%;
+}
+
+.search_blocker > form > input:focus{
+    outline: none;
+}
+
 .sort-block {
     width: 30%;
     background-color: #ffc266;

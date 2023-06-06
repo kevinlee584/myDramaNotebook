@@ -11,6 +11,8 @@ import java.util.function.Function;
 public interface Scraper {
     Map<String, Function<WebDriver, List<Drama>>> getScripts();
 
+    Function<String, Function<WebDriver, List<Drama>>> getSearchScript();
+
     Provider getProvider();
 
 }

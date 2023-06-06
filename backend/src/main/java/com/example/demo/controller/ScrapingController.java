@@ -30,9 +30,12 @@ public class ScrapingController {
                     String providerFavoriteIcon = e.getProvider().getFaviconUrl();
                     Map<String, String> providerSorts =  e.getScripts().keySet().stream()
                             .collect(Collectors.toMap(e2 -> e2, e2 ->"/provider/" + providerName + "/" + e2));
+                    String providerSearcher = String.format("/provider/%s/search", providerName);
+
                     return Map.of("provider", providerName,
                             "favicon", providerFavoriteIcon,
-                            "sorts", providerSorts);
+                            "sorts", providerSorts,
+                            "search", providerSearcher);
                 }).collect(Collectors.toList());
     }
 
@@ -51,6 +54,11 @@ public class ScrapingController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("Resource not found, provider: %s, sort: %s", provider, sort ));
         }
+    }
+
+    @PostMapping("/provider/{provider}/search")
+    public List<Drama>  searchDramas(@RequestBody String keyword,  @PathVariable("provider") String provider) {
+        return scraperService.search(provider, keyword);
     }
 
 }

@@ -7,29 +7,40 @@ import DramaService from "../../service/DramaService";
 
 const App = function(){
 	const [record, setRecord] = useState([])
-	const [page, setPage] = useState({page: "", isLoad: false, dramas: []})
+	const [page, setPage] = useState({action: "", url: "", args: [], status: "loading", dramas: []})
 	
-	// default page
-	useEffect(() => {
-		RecordService.getRecord()
-		.then(res => {
-			setPage({page: "record", isLoad: true, dramas: res})
-			setRecord(res)
-		})
-	}, [])
 
-	const loadPage = (cache) => function(p = page.page) {
-        setPage({page: p, isLoad: false, dramas: []})
-        var f = (p == "record") ? RecordService.getRecord() : DramaService.getDramas(p, cache)
+	/*
+		action = {get, search, reload, error}
+	*/
+	const loadPage = function(action, url, args) {
+        setPage({status: "loading", dramas: []})
+
+		let f
+
+		if (action == "get") {
+			if (url == "/record") f = RecordService.getRecord()
+			else f = f = DramaService.getDramas(url, args)
+		} else if(action == "search") {
+			f = DramaService.searchDramas(url, args)
+		}
+
         f.then(res => {
-            setPage({page: p, isLoad: true, dramas: res})
+            setPage({action, url, args, status: "loaded", dramas: res})
         })
     }
 
+	// default page
+	useEffect(() => loadPage("get", "/record"), [])
+
+	// set record
+	useEffect(() => {RecordService.getRecord().then(res => setRecord(res))}, [])
+
+
 	return (
 		<>
-			<Title setPage={loadPage(true)}></Title>
-			<Page page={page} record={record} reload={loadPage(false)}></Page>
+			<Title setPage={loadPage}></Title>
+			<Page page={page} record={record} reload={() => loadPage(page.action, page.url, false)}></Page>
 		</>
 	)
 };

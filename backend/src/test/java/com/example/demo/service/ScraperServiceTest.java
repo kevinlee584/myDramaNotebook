@@ -31,6 +31,11 @@ class ScraperServiceTest {
             }
 
             @Override
+            public Function<String, Function<WebDriver, List<Drama>>> getSearchScript() {
+                return null;
+            }
+
+            @Override
             public Provider getProvider() {
                 return new Provider("test", "testUrl");
             }
