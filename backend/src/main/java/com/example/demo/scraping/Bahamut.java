@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 
@@ -47,11 +49,15 @@ final public class Bahamut implements Scraper{
         return animates.stream().map(e -> {
             try {
                 String animeName = e.selectFirst(".anime-name > p").text();
-                String animePicUrl = e.selectFirst(".anime-blocker > img").attr("data-src");
-                String animeVideoUrl = e.selectFirst(".anime-card-block").attr("href");
 
-                if (!animePicUrl.startsWith("http"))
-                    animePicUrl = String.format("%s/%s", url, animePicUrl);
+                String query = e.selectFirst(".btn-card-block").attr("onclick");
+                Pattern pattern = Pattern.compile("^animefun.toggleGather\\((\\d+),");
+                Matcher matcher = pattern.matcher(query);
+                if (!matcher.find()) throw new NullPointerException();
+                int number = Integer.parseInt(matcher.group(1));
+                String animePicUrl = String.format("https://p2.bahamut.com.tw/B/ACG/c/%02d/0000%d.JPG", number % 100, number);
+
+                String animeVideoUrl = e.selectFirst(".anime-card-block").attr("href");
                 if (!animeVideoUrl.startsWith("http"))
                     animeVideoUrl = String.format("%s/%s", url, animeVideoUrl);
 
