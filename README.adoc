@@ -30,14 +30,22 @@ Run app using this command:
 
 === Demo
 
-view dramas
+'''
+- View dramas
 
 image::_media/view.gif[]
 
-save record
+'''
+- Save dramas
 
 image::_media/save.gif[]
 
-remove recode
+'''
+- Remove Dramas
 
 image::_media/remove.gif[]
+
+'''
+- Search Dramas
+
+image::_media/search.gif[]
